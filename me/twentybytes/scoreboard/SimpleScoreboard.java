@@ -17,13 +17,15 @@ import java.util.List;
 
 public class SimpleScoreboard {
 
+    public static final String BLANK = "&&";
+
     private int initial;
     private int index;
     private String blank = "";
     private boolean finished = false;
 
     private final Player owner;
-    private final Scoreboard scoreboard;
+    private Scoreboard scoreboard;
     private Objective objective;
     private String title;
 
@@ -68,7 +70,7 @@ public class SimpleScoreboard {
             throw new RuntimeException("You can add rows if board not finished.");
         for (IRow row : rows) {
             if (row instanceof IRow.Constant) {
-                objective.getScore(((IRow.Constant) row).text).setScore(index--);
+                objective.getScore(((IRow.Constant) row).text.replace(BLANK, blank())).setScore(index--);
                 continue;
             }
             IRow.Switchable switchable = (IRow.Switchable) row;
@@ -82,8 +84,8 @@ public class SimpleScoreboard {
 
     public SimpleScoreboard resetRows(IRow... rows) {
         finished = false;
-        if (objective != null)
-            objective.unregister();
+        resetBlank();
+        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         objective = scoreboard.registerNewObjective("board", "dummy");
         objective.setDisplayName(title);
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -106,7 +108,7 @@ public class SimpleScoreboard {
     public SimpleScoreboard update() {
         for (IRow.Switchable switchable : switchables) {
             Team team = scoreboard.getTeam(switchable.id);
-            team.setPrefix(switchable.text.getText());
+            team.setPrefix(switchable.text.getText().replace(BLANK, blank()));
         }
         return this;
     }
@@ -117,6 +119,11 @@ public class SimpleScoreboard {
 
     public String blank() {
         return (blank = blank.concat(" "));
+    }
+
+    public SimpleScoreboard resetBlank() {
+        blank = "";
+        return this;
     }
 
     public interface IRow {
