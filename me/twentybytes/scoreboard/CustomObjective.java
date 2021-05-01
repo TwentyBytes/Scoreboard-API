@@ -9,6 +9,7 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -18,6 +19,8 @@ import java.util.UUID;
 
 @Getter
 public class CustomObjective {
+
+    private static final Random random = new Random();
 
     private final CustomScoreboard scoreboard;
     private final Objective objective;
@@ -55,7 +58,7 @@ public class CustomObjective {
     }
 
     public CustomObjective record(IChangeableText<String> text) {
-        Team team = scoreboard.getScoreboard().registerNewTeam(UUID.randomUUID().toString().substring(0, 8));
+        Team team = scoreboard.getScoreboard().registerNewTeam(String.valueOf(random.nextInt()));
         blank();
         team.addEntry(blank);
         objective.getScore(blank).setScore(initial--);
