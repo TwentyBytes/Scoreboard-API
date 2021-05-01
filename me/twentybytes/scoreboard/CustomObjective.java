@@ -34,6 +34,7 @@ public class CustomObjective {
         this.scoreboard = scoreboard;
         this.objective = scoreboard.getScoreboard().registerNewObjective("board", "dummy");
         this.owner = owner;
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         setScoreboard();
     }
 
