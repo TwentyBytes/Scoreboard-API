@@ -23,7 +23,7 @@ public class CustomObjective {
     private static final Random random = new Random();
 
     private final CustomScoreboard scoreboard;
-    private final Objective objective;
+    private Objective objective;
     private Player owner;
     private int initial = 99;
     private String blank = "";
@@ -77,6 +77,7 @@ public class CustomObjective {
         records.clear();
         objective.unregister();
         scoreboard.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        objective = scoreboard.getScoreboard().registerNewObjective("board", "dummy");
         setScoreboard();
         return this;
     }
